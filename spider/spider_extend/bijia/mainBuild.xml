@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project name="bijia" default="jar" basedir=".">
+	<target name="clean">
+		<delete dir="build"/>
+	</target>
+	<path id="classpath">
+		<fileset  dir="lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	<target name="compile" depends="clean">
+		<mkdir dir="build/classes"/>
+		<javac srcdir="src" destdir="build/classes" encoding="UTF-8" includeantruntime="false" debug="true">
+			<classpath refid="classpath"/>
+		</javac>
+		<copy todir="build/classes/net/hubs1/bijia/extract">
+			<fileset file="src/net/hubs1/bijia/extract/py.properties">
+			</fileset>
+		</copy>
+	</target>
+	<target name="copyConfig" depends="compile">
+		<copy todir="build/classes/lib">
+			<fileset dir="lib">
+			</fileset>
+		</copy>
+		<copy todir="build/classes">
+			<fileset dir="conf">
+			</fileset>
+		</copy>
+	</target>
+	<target name="jar" depends="copyConfig">
+		<pathconvert property="mf.classpath" pathsep=" ">
+			<mapper>
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*" to="lib/*" />
+				</chainedmapper>
+			</mapper>
+			<path refid="classpath" />
+		</pathconvert>
+
+
+		<jar destfile="mainMR.jar" basedir="build/classes">
+			<manifest>
+				<attribute name="Main-class" value="net.hubs1.bijia.main.CtripMain"/>
+				<attribute name="Class-Path" value="${mf.classpath} "/>
+			</manifest>
+		</jar>
+	</target>
+</project>

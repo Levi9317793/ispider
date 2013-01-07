@@ -1,0 +1,10 @@
+block_run
+	SetGobal:domain==http://www.agoda.com.cn
+	SetGobal:source==agoda
+	SetGobal:rowkeyPrefix==agoda
+	SetGobal:deleteUrlParam==true
+	
+	ScanURL: agoda.image.a    agoda.image.zzzzzzzzzz
+	MultiThread:3	
+	SaveImage:
+endblock

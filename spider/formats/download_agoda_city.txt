@@ -1,0 +1,13 @@
+block_run
+	SetGobal:"domain","http://www.agoda.com.cn"
+	SetGobal:"source","agoda"
+	SetGobal:"rowkeyPrefix","agoda.city"
+	SetGobal:"deleteUrlParam","true"
+	Get:"http://www.agoda.com.cn/world.html"
+	Html:#ctl00_ctl00_MainContent_ContentMain_AroundTheWorld1_upnlAroundTheWorld,,#accordionContinent,,table,,a:href
+	Get:
+	Html:"#ctl00_ctl00_MainContent_ContentStates_divStates","table","ul","a:href"
+	Get:
+	Html:"#ctl00_ctl00_MainContent_ContentStates_divStates","table","ul","a:href"
+	SaveUrl:
+endblock

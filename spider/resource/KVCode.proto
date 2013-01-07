@@ -1,0 +1,7 @@
+    package net.hubs1.spider.message;  
+    message KVBean {  
+      required string key=1;
+	  required bytes value=2;
+    }
+    
+    

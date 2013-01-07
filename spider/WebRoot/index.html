@@ -1,0 +1,243 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>spider任务管理</title>
+<link rel="stylesheet" href="css/speechbubbles.css" type="text/css"  />
+<link rel="stylesheet" href="css/flexigrid.css" type="text/css"  />
+<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.23.custom.css" id="jquery_ui_css" type="text/css" media="all" />
+<link rel="stylesheet" href="css/ui.theme.css" type="text/css" media="all" />
+
+<script src="js/jquery-1.8.2.js" type="text/javascript"></script>
+<script src="js/jquery-ui-1.9.0.custom.min.js" type="text/javascript"></script>
+<script src="js/speechbubbles.js" type="text/javascript"></script>
+<script src="js/flexigrid.js" type="text/javascript"></script>
+<script  src="js/spider.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+<style>
+	.filelist li {
+		display:inline-block;
+		list-style:none;
+	}
+	
+	.div_RightMenu{
+		width:80px;
+		display:none;
+		position:absolute;
+		z-index:99999;
+		background-color:#FFFFFF;
+		border-top-style: solid;
+		border-right-style: solid;
+		border-bottom-style: solid;
+		border-left-style: solid;
+		border-top-color: #0066CC;
+		border-right-color: #0066CC;
+		border-bottom-color: #0066CC;
+		border-left-color: #0066CC;
+	}
+</style>
+
+</head>
+<body>
+<div align="right"><div id="switchcss"> </div></div>
+<div id="spider_tabs">
+	<ul>
+		<li><a href="#new_format">创建模版</a></li>
+		<li><a href="#find_task">查看模版</a></li>
+		<li><a href="#new_task">任务管理</a></li>
+		<li><a href="#tools">辅助工具</a></li>
+		<li><a href="#help">帮助</a></li>
+	</ul>
+	<div id="new_format">
+		<div id="newtask_accordion">
+			<h3><a href="#">一、上传模版</a></h3>
+			<div>
+				<form action="/spider/manager/new"  name="newformat" method="post" id="newFormat">
+					<input type="hidden" name="method" value="submitFormat" />
+					<p>模版类型： 
+						<input type="radio" name="spider_type" value="extract" onclick="setPath('extract')">
+						<span class="addspeech"  title="指模版用于抽取数据时使用">抽取</span> &nbsp;&nbsp;&nbsp;&nbsp;
+						
+						<input type="radio" name="spider_type" value="download" onclick="setPath('download')" checked="true">
+						<span class="addspeech" title="指在模版文件中,并没有定义获取url，需要外部传递url，该模版才能使用，一般情况下该模版可以在多下载点同时运行">url下载</span>&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						<input type="radio" name="spider_type" value="custom" onclick="setPath('custom')" >
+						<span class="addspeech" title="指在模版文件中已提供了URL或者定义了url的来源，可以独立运行，一般情况下该模版只能在一个下载点运行">模版下载</span>
+						
+					</p>
+					<p>是否更新：<input  type="checkbox" name="update" value="true"></p>
+					<p>文件名：<input  type="text" name="fileName" value=""></p>
+					<p>保存路径： <input id="formatsavepath" type="text" value="/spider/formats/download/" name="basepath" readonly="true" size="30"/>
+								<input type="text" name="extp" value="">
+								<img class="addspeech" src="/spider/image/alert.gif" title="注：来源及类型请依据需要下载的URL来定义！！,url下载模式下填写的路径一般由来源和资源类型构成，如agoda/hotel,ctrip.review等，模版，抽取一般只需填写来源即可，如booking_com,ctrip,elong等 "/>
+					</p>
+				     <div>
+				     		<p>模版内容：</p>
+							<textarea name="format" rows="15" cols="80">
+							</textarea>
+					</div>
+				</form>
+				<p> <input type="submit"  value="提交"  onclick="submitFormat()"></p>
+			</div>
+			<h3><a href="#">二、测试模版</a></h3>
+			<div>
+				<form action="/spider/manager/test"  name="testFormat" method="post" id="testFormat">
+					<input type="hidden" name="method" value="testFormat" />
+					<p>  注： 如果模版本身已经有设置url，那么就无需填写URL。 对于测试结果的正确与否，请根据输出结果自行判断。 </p>
+					<p>测试用URL：                <input type="text" name="test_url" value="" size="50"></p>
+					<p>模版文件地址：         <input type="text" id="formatFilePath" name="formatFilePath" value="" size="50" onclick="createPath()"/></p>
+					<p> 
+					 <input type="button" name="start_test" value="开始测试" onclick="startTest()"><input type="button" name="stop_test" value="停止"/></p>
+				 </form>
+			     <div>
+			     		<p>测试结果：</p>
+						<div id="out_result">
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="find_task" style="height:300px" >
+		<div >
+			<ul class="filelist">
+			   <li>
+				  <div style="width:180px;" align="center" data="/spider/formats/extract" >
+			   	    <div ><img src="/spider/image/dir.png" border="0"/></div>
+			        <span>extract</span>
+				  </div>
+			  </li>
+		      <li>
+			      <div style="width:180px;"  align="center" data="/spider/formats/download"  >
+			   	    <div ><img src="/spider/image/dir.png"/></div>
+			        <span>download</span>
+				  </div>
+			  </li>
+			  
+			  <li>
+			      <div style="width:180px;"  align="center" data="/spider/formats/custom" >
+			   	    <div ><img src="/spider/image/dir.png"/></div>
+			        <span>custom</span>
+				  </div>
+			  </li>
+			</ul>
+		</div>
+	</div>
+	
+	<div id="new_task">
+		<div style="display:none" id="create_task">
+			<form name="newtaskform" method="post" action="" id="newtaskform">
+				<input type="hidden" name="method" value="createTask" />
+				<input type="hidden" name="isrun" value="false" />
+				<p><label>任务名称：</label><input type="text" size="20" name="taskname"/></p>
+				<p><label>任务描述：</label><input type="text" size="50" name="taskdesc"/></p>
+				<p>任务类型：
+						<input type="radio" name="task_type" value="extract" onclick="selectData('extra')">抽取 &nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="task_type" value="url" onclick="selectData('multi')" checked="true">多点下载&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="task_type" value="format" onclick="selectData('single')" >纯模版下载(单点)
+				</p>
+				<p id="format_file_p" style="display:none"><label>模版文件：</label><input  type="text" size="50" name="formatfile" disabled="disabled"/><img class="addspeech" src="/spider/image/alert.gif" title="在单点下载，抽取模式下请务必填写模版路径，多点下载模式下，优先使用任务中设置的数据反问，忽略模版中的设置 "/></p>
+				<p><label>是否增量执行：</label>
+					<input type="radio" name="increment" value="yes" onclick="setPath('extract')" checked="true">增量 &nbsp;&nbsp;&nbsp;&nbsp;
+				    <input type="radio" name="increment" value="no" onclick="setPath('download')" >全部&nbsp;&nbsp;&nbsp;&nbsp;
+				    <img class="addspeech" src="/spider/image/alert.gif" title="第一次运行都以全部方式进行，第二次及以后运行该设置生效"/>
+				</p>
+				<p> <label>定时执行：</label> <input type="text" size="10" name="fixedtime"/>小时 &nbsp;&nbsp;&nbsp;&nbsp;
+				      <img class="addspeech" src="/spider/image/alert.gif" title="指该任务结束后几小时再次开始运行该任务及相关的任务"/></p>
+				
+				<p id="sourcepath_p">
+					<label>下载标志：</label> <input  type="text" size="20" name="queuetag"/>
+					<img class="addspeech" src="/spider/image/alert.gif" title="用于从指定通道获取URL，该标识需和模版的保存路径你所填写的部分相同。注： 标识中的.会被替换为/后，去获取模版"/>
+				</p>
+				<p id="datarange_p"> 
+					<label>数据范围：</label> <input type="text" size="20" name="rangeStart"/> 至  <input  type="text" size="20" name="rangeEnd"/>
+				</p>
+				
+				<p id="pre_task_p"> 
+					<label>前置任务：</label>
+					<select id="pre_task_select" name="pretask">
+						<option value="">--</option>
+					</select>
+				</p>
+				<p id="next_task_p"> 
+					<label>后续任务：</label>
+					<select id="next_task_select" name="nexttask">
+						<option value="">--</option>
+					</select>
+				</p>
+			</form>
+		</div>
+		<div>
+			<table id="tasktable"></table>
+		</div>
+	</div>
+	
+	<div id="tools">
+	</div>
+	<div id="help">
+		
+    </div>
+</div>
+
+
+
+<!--  -->
+ <div id="dialog" title="提交结果">
+ 	<div id="submit_result"></div>
+ </div>
+ 
+ <div id="dialog_move" title="移动">
+ 	<div id="submit_result_move"></div>
+ </div>
+ 
+ <div id="dialog_delete" title="移动">
+ 	<div id="submit_result_delete"></div>
+ </div>
+ 
+ <div id="subdir_dialog" title="文件列表" style="width:1024px">
+ 	<ul id="sub_list" class="filelist">
+ 		
+ 	</ul>
+ </div>
+ 
+ <div id="dir_format" style="display:none">
+ 	<div style="width:200px;"  align="center">
+  	    <div><a href="#" id="dir_img"><img src="/spider/image/dir.png"/></a></div>
+        <a href="#" id="dir_name">download</a>
+   </div>
+ </div>
+ 
+ <div id="file_format" style="display:none">
+ 	<div style="width:220px;"  align="center">
+  	    <div ><a href="#" id="file_img"><img src="/spider/image/format.png"/></a></div>
+       <a href="#" id="file_name">download</a>
+   </div>
+ </div>
+ 
+ 
+<div id="right_menu" class="div_RightMenu">
+	<ul id="right_menu_ul" style="list-style:none;margin: 1px;padding:5px;">
+		<li class="rightmenu_opt rightmenu_file" onclick="menuOpt(1,this)">查看</li>
+		<li class="rightmenu_opt rightmenu_file" onclick="menuOpt(2,this)">复制</li>
+		<li class="rightmenu_opt rightmenu_file" onclick="menuOpt(3,this)">修改</li>
+		<li class="rightmenu_opt rightmenu_file" onclick="menuOpt(4,this)">移动</li>
+		<li class="rightmenu_opt rightmenu_dir"  onclick="menuOpt(5,this)">删除</li>
+		<li class="rightmenu_opt rightmenu_dir"  onclick="menuOpt(6,this)">新建目录</li>
+	</ul>
+</div>
+
+
+<div id="menu_opt_dialog" style="display:none">
+	<textarea id="menu_opt_dialog_input" rows="1" cols="90"></textarea>
+</div>
+
+</body>
+</html>
+
+	
+
+
+

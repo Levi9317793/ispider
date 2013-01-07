@@ -1,0 +1,13 @@
+block_run
+	SetGobal:"domain","http://hotel.elong.com"
+	SetGobal:"source","elong"
+	SetGobal:"rowkeyPrefix","elong.city"
+	SetGobal:"charset","utf-8"
+	SetGobal:"intervaltime","1000"
+	Get:"http://hotel.elong.com/directory/"
+	Html:"a[href]:href"
+	filter:"^/directory/city/"
+	Get:
+	Html:"#ct_brand","a[href]!first:href"
+	SaveUrl:
+endblock

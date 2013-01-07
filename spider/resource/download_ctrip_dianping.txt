@@ -1,0 +1,18 @@
+block_init
+	SetGobal:"domain","http://hotels.ctrip.com"
+	SetGobal:"source","ctrip"
+	SetGobal:"rowkeyPrefix","ctrip.hotel"
+	SetGobal:"charset","gb2312"
+	ScanURL:"ctrip.hotel.a","ctrip.hotel.zzzzzzz"
+endblock
+
+
+block_run
+	Replace:"/hotel/","/hotel/dianping/"
+	get:
+	SavePage:
+endblock
+
+block_destory
+	
+endblock

@@ -1,0 +1,30 @@
+block_init
+	SetGobal:"domain","http://hotels.ctrip.com"
+	SetGobal:"source","ctrip"
+	SetGobal:"rowkeyPrefix","ctrip.hotel"
+	SetGobal:"charset","gb2312"
+	SetGobal:"intervaltime","500"
+	ScanURL:"ctrip.city.a","ctrip.city.zzzzzzz"
+endblock
+
+
+block_run
+	Get:
+	$hrefUrl=Html:"li.searchresult_info_name","a[href]:href"
+	$nextPage=Html:"#ctl00_MainContentPlaceHolder_ucPageControl_downHerf","a[href]:href"
+	filter:"$hrefUrl","^/hotel/"
+	$nextPage=filter:"$nextPage","^http://hotels"
+	SaveUrl:
+	Loop:"   $nextPage > h"
+		Get:"$nextPage"
+		$hrefUrl=Html:"li.searchresult_info_name","a[href]:href"
+		$nextPage=Html:"#ctl00_MainContentPlaceHolder_ucPageControl_downHerf","a[href]:href"
+		$nextPage=filter:"$nextPage","^http://hotels"
+		filter:"$hrefUrl","^/hotel/"
+		SaveUrl:
+	EndCondition:
+endblock
+
+block_destory
+	
+endblock

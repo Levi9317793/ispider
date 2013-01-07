@@ -1,0 +1,11 @@
+block_init
+	setgobal:"sourceTable","download_page"
+	setgobal:"targetTable","spider_dianping"
+	setgobal:"startRowkey","ctrip.dianping.a"
+	setgobal:"endRowkey","ctrip.dianping.zzzzz"
+endblock
+
+block_run
+	Htmle:"#Ul1","li"
+	$date=Html:"p.comment_date!first:ownText"
+endblock

@@ -1,0 +1,13 @@
+block_init
+	SetGobal:"domain","http://www.agoda.com.cn"
+	SetGobal:"source","agoda"
+	SetGobal:"rowkeyPrefix","cn.agoda.hotel"
+	SetGobal:"deleteUrlParam","true"
+	ScanURL: "agoda.hotel.north_america.a","agoda.hotel.north_america.zzzzzzzzz"
+	MultiThread:"3"
+endblock
+
+block_run
+	Get:
+	SavePage:
+endblock

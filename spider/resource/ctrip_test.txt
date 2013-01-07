@@ -1,0 +1,32 @@
+block_run
+	SetGobal:"domain","http://www.ctrip.com"
+	SetGobal:"source","ctrip"
+	SetGobal:"rowkeyPrefix","agoda.city"
+	SetGobal:"deleteUrlParam","true"
+	
+	Get:"http://hotels.ctrip.com/hotel/73776.html"
+	
+	SetRequestParam:"DepDate","2012-8-31"
+	SetRequestParam:"DepTime","2012-8-31"
+	SetRequestParam:"StartDate","2012-8-25"
+	SetRequestParam:"StartDate","2012-8-25"
+	SetRequestParam:"#aspnetForm>input"
+	Post:"$preurl"
+	Htmle:"#detail2_room_box","table[class=hotel_datelist]","tbody>tr"
+	HtmlGroup:".t"
+	$xyz=Call:"!room","true"
+	$xyz=Jsonstring:"$xyz"
+endblock
+
+block_room
+	$roomName=Html:".hotel_room_name"
+	$rateName=Html:".hotel_room_style"
+	$rateList=Html:"span[mod_jmpinfo_content^=|]:mod_jmpinfo_content"
+	$rateList=Split:"$rateList","\|"
+	
+	$rate1=Set:"$rateList","1"
+	$rate1_r=Set:"$rateList","8"
+	$rate1_t=Set:"$rateList","9"
+	$rate1=join:"$rate1","$rate1_r"
+	$rate1=join:"$rate1","$rate1_t"
+endblock

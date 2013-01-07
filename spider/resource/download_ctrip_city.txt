@@ -1,0 +1,11 @@
+block_run
+	SetGobal:"domain","http://hotels.ctrip.com"
+	SetGobal:"source","ctrip"
+	SetGobal:"rowkeyPrefix","ctrip.city"
+	SetGobal:"charset","gbk"
+	SetGobal:"intervaltime","1000"
+	Get:"http://pages.ctrip.com/public/sitemap/cityHotel.htm"
+	Html:"a[href]:href"
+	filter:"^http://hotels"
+	SaveUrl:
+endblock

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+    <property>
+      <name>fs.default.name</name>         
+	  <value>hdfs://search1:50090</value> 
+	</property>
+	<property>
+	   <name>fs.trash.interval</name>         
+	   <value>4320</value>     
+	</property>
+	<property>
+	   <name>hadoop.tmp.dir</name>         
+	   <value>/home/hbase/hadoop_data/tmp</value>     
+	</property>
+	<property>
+	   <name>fs.checkpoint.period</name>   
+	   <value>3600</value><!-- 1 hours check-->                
+	</property>
+
+    <property>
+       <name>fs.checkpoint.dir</name>
+       <value>/home/hbase/hadoop_data/namesecondary</value>
+    </property>
+</configuration>

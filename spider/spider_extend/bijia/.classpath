@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="conf"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/grab/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/commons-configuration-1.6.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/hadoop-core-1.0.3.jar" sourcepath="C:/Documents and Settings/irxwang/.m2/repository/org/apache/hadoop/hadoop-core/1.0.3/hadoop-core-1.0.3-sources.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/hbase-0.92.1.jar" sourcepath="C:/Documents and Settings/irxwang/.m2/repository/org/apache/hbase/hbase/0.92.1/hbase-0.92.1-sources.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/httpclient-4.2.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/httpcore-4.2.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/json-20090211.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/jsoup-1.6.3.jar" sourcepath="C:/Documents and Settings/irxwang/.m2/repository/org/jsoup/jsoup/1.6.3/jsoup-1.6.3-sources.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/log4j-1.2.16_2.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/grab/lib/zookeeper-3.4.3.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/irxwang/.m2/repository/mysql/mysql-connector-java/5.0.5/mysql-connector-java-5.0.5.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/irxwang/.m2/repository/com/rabbitmq/amqp-client/2.7.0/amqp-client-2.7.0.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/irxwang/.m2/repository/commons-io/commons-io/1.2/commons-io-1.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

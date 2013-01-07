@@ -1,0 +1,84 @@
+block_init
+	setgobal:"sourceTable","download_page"
+	setgobal:"targetTable","spider_price"
+	setgobal:"startRowkey","ctrip.hotel.a"
+	setgobal:"endRowkey","ctrip.hotel.zzzzzzzzzz"
+endblock
+
+block_run
+	Htmle:"table.hotel_datelist","tbody>tr"
+	HtmlGroup:".t"
+	HtmlFilter:"span.base_txtdiv"
+	$xyz=Call:"!room","true"
+	$xyz=Jsonstring:"$xyz"
+endblock
+
+block_room
+	$roomName=Html:".hotel_room_name"
+	$roomCode=PinYin:"$roomName"
+	$saleName=Html:".hotel_room_style"
+	$saleName=Replace:"$saleName","[()]"
+	$rateList=Html:"span[mod_jmpinfo_content^=|]:mod_jmpinfo_content"
+	$rateList=Split:"$rateList","\|"
+	
+	$rate1=Call:"$rateList","!rate1","true","true"
+	$rate2=Call:"$rateList","!rate2","true","true"
+	$rate3=Call:"$rateList","!rate3","true","true"
+	$rate4=Call:"$rateList","!rate4","true","true"
+	$rate5=Call:"$rateList","!rate5","true","true"
+	$rate6=Call:"$rateList","!rate6","true","true"
+	$rate7=Call:"$rateList","!rate7","true","true"
+	$rate=list:"$rate1","$rate2","$rate3","$rate4","$rate5","$rate6","$rate7"
+	RemoveSet:"$rate1"
+	RemoveSet:"$rate2"
+	RemoveSet:"$rate3"
+	RemoveSet:"$rate4"
+	RemoveSet:"$rate5"
+	RemoveSet:"$rate6"
+	RemoveSet:"$rate7"
+	RemoveSet:"$rateList"
+endblock
+
+block_rate1
+	$rate_time=Set:"1"
+	$rate_price=Set:"9"
+	$rate_breakfast=Set:"10"
+endblock	
+
+block_rate2
+	$rate_time=Set:"2"
+	$rate_price=Set:"11"
+	$rate_breakfast=Set:"12"
+endblock
+
+block_rate3
+	$rate_time=Set:"3"
+	$rate_price=Set:"13"
+	$rate_breakfast=Set:"14"
+endblock
+
+block_rate4
+	$rate_time=Set:"4"
+	$rate_price=Set:"15"
+	$rate_breakfast=Set:"16"
+endblock
+
+block_rate5
+	$rate_time=Set:"5"
+	$rate_price=Set:"17"
+	$rate_breakfast=Set:"18"
+endblock
+
+block_rate6
+	$rate_time=Set:"6"
+	$rate_price=Set:"19"
+	$rate_breakfast=Set:"20"
+endblock
+
+block_rate7
+	$rate_time=Set:"7"
+	$rate_price=Set:"21"
+	$rate_breakfast=Set:"22"
+endblock
+
+

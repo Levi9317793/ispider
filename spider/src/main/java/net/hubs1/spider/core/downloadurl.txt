@@ -1,0 +1,62 @@
+SetGobal:domain==http://www.agoda.com.cn
+SetGobal:source==agoda
+SetGobal:rowkeyPrefix==agoda.hotel
+SetGobal:deleteUrlParam==true
+Get:http://www.agoda.com.cn/world.html
+Html:Jsoup:#ctl00_ctl00_MainContent_ContentMain_AroundTheWorld1_upnlAroundTheWorld,,#accordionContinent,,table,,a:href
+Get:
+Html:Jsoup:#ctl00_ctl00_MainContent_ContentStates_divStates,,table,,ul,,a:href
+Get:
+Html:Jsoup:#ctl00_ctl00_MainContent_ContentStates_divStates,,table,,ul,,a:href
+Get:
+#Htmlno:Jsoup:#ctl00_ctl00_breadCrumb_nav_breadcrumb,,table[itemprop=breadcrumb],,td:eq(5),,i=>hotelNum||Jsoup:#ctl00_ctl00_MainContent_ContentMain_HotelSortableListByCity1_pnlShowHotelList,,.spacer_resultcon>div>a:size=>hotelNum2
+#Condition:$hotelNum2 = $hotelNum,,$hotelNum > 0
+  Html:Jsoup:#ctl00_ctl00_MainContent_ContentMain_HotelSortableListByCity1_pnlShowHotelList,,.spacer_resultcon>div>a:href
+  SaveUrl:
+#EndCondition:
+#Html:Jsoup:form[id=aspnetForm]:action
+SetRequestParam:#aspnetForm,,input[type=hidden]
+#SetRequestParam:ctl00_ctl00_scriptmanager1_HiddenField==\b
+SetRequestParam:ctl00$ctl00$MainContent$area_promo$CitySearchBox1$SearchButton==查看价格！
+SetRequestParam:ddlCheckInDay==21
+SetRequestParam:ddlCheckInMonthYear==8,2012
+SetRequestParam:ddlCheckOutDay==22
+SetRequestParam:ddlCheckOutMonthYear==8,2012
+SetRequestParam:ctl00$ContentMain$DestinationSearchBox1$ddlDistance==1
+SetRequestParam:ctl00$ctl00$MainContent$area_promo$CitySearchBox1$arrivaldate==08/21/2012
+SetRequestParam:ctl00$ctl00$MainContent$area_promo$CitySearchBox1$departdate==08/22/2012
+SetRequestParam:ctl00$ctl00$MainContent$area_promo$CitySearchBox1$ddlNights==1
+SetRequestParam:ctl00$ContentMain$ddlCurrency==CNY
+Post:preurl
+SetRequestParam:#aspnetForm,,input[type=hidden]
+SetRequestParam:__ASYNCPOST==true
+SetRequestParam:#ctl00_ContentMain_DestinationSearchBox1_TextSearch1_txtSearch
+SetRequestParam:__EVENTTARGET==ctl00$ContentMain$timer1
+SetRequestParam:ctl00$scriptmanager1==ctl00$ContentMain$upResultMain|ctl00$ContentMain$timer1
+Post:preurl
+SubString:
+SetRequestParam:__VIEWSTATE==$__VIEWSTATE
+HtmlNo:Jsoup:#ctl00_ContentMain_btnNext:size=>turnPage
+Html:Jsoup:#resultcon_list,,#hotel_result_item,,table,,td[class=col_hotelinfo],,.mbluebold,,a:href
+SaveUrl:
+#removeRequestParam:ctl00$ctl00$MainContent$area_promo$CitySearchBox1$SearchHotel
+#removeRequestParam:ctl00$ContentMain$DestinationSearchBox1$SearchHotel
+SetRequestParam:#aspnetForm,,input[type=hidden]
+SetRequestParam:#aspnetForm,,input[name^=ctl00$ContentMain]
+#SetRequestParam:ctl00$ContentMain$DestinationSearchBox1$TextSearch1$txtSearch==上海
+SetRequestParam:__ASYNCPOST==true
+SetRequestParam:__EVENTTARGET==ctl00$ContentMain$btnNext
+SetRequestParam:ctl00$scriptmanager1==ctl00$scriptmanager1|ctl00$ContentMain$btnNext
+SetRequestParam:ctl00$ContentMain$ddlSort==1
+removeRequestParam:ctl00$ctl00$MainContent$area_promo$CitySearchBox1$SearchButton
+removeRequestParam:ctl00$ContentMain$DestinationSearchBox1$SearchButton
+#SetRequestParam:#aspnetForm,,input[type!=button]
+Loop:$turnPage > 0
+	Post:preurl
+	SubString:
+	SetRequestParam:__VIEWSTATE==$__VIEWSTATE
+	HtmlNo:Jsoup:#ctl00_ContentMain_btnNext:size=>turnPage
+	Html:Jsoup:#resultcon_list,,#hotel_result_item,,table,,td[class=col_hotelinfo],,.mbluebold,,a:href
+	SaveUrl:
+EndCondition:
+RemoveRequestParam:

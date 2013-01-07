@@ -1,0 +1,21 @@
+block_init
+	SetGobal:"domain","http://hotels.ctrip.com"
+	SetGobal:"source","ctrip"
+	SetGobal:"rowkeyPrefix","ctrip.hotel"
+	SetGobal:"charset","gb2312"
+	#ScanURL:"ctrip.hotel.a","ctrip.hotel.zzzzzzz"
+	$startDate=Date:"0","yyyy-MM-dd"
+	$depDate=Date:"7","yyyy-MM-dd"
+endblock
+
+
+block_run
+	SetRequestParam:"StartDate","$startDate"
+	SetRequestParam:"DepDate","$depDate"
+	Post:
+	SavePage:
+endblock
+
+block_destory
+	
+endblock

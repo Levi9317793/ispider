@@ -1,0 +1,139 @@
+block_init
+	#必须设置sourceTable和targetTable
+	setgobal:"sourceTable","download_page"
+	setgobal:"targetTable","spider_prop"
+	
+	setgobal:"startRowkey","cn.agoda.hotel.a"
+	setgobal:"endRowkey","cn.agoda.hotel.zzzzzzzzzz"
+endblock
+
+
+block_run
+	$name=Html:"#content","h1[itemprop=name]","#ctl00_ctl00_MainContent_ContentMain_hotelheader1_lblHotelName"
+	
+	$name_en=Html:"#content","h1[itemprop=name]","#ctl00_ctl00_MainContent_ContentMain_hotelheader1_lblEHotelName"
+	$name_en=Extract:"$name_en","[^()]+"
+	
+	$address=Html:"#content",".header_hotel","p[class=fontsmalli sblueboldunder]"
+	$address=Extract:"$address","[^()]+"
+	
+	#zip=
+	$phone=Html:"#content",".header_hotel","p[class=fontsmalli sblueboldunder]"
+	$phone=Extract:"$phone","\+?[0-9]{2}[-0-9]{4,}"
+	
+	$country=Html:"#ctl00_ctl00_breadCrumb_linkGrid_ctl03_breadcrumbLink"
+	#provience=
+	
+	$city=Html:"#ctl00_ctl00_breadCrumb_linkGrid_ctl04_breadcrumbLink"
+	
+	#district=
+	
+	$trade_area=Html:"#ctl00_ctl00_MainContent_ContentMain_ThumbPhotos_rLocation"
+	$trade_area=SubString:"$trade_area",":"
+	
+	$total_rooms=Html:"#ctl00_ctl00_MainContent_ContentMain_ThumbPhotos_rRooms"
+	$total_rooms=Extract:"$total_rooms","\d+"
+	
+	$star_rating=Html:"#ctl00_ctl00_MainContent_ContentMain_hotelheader1_btnHotelStar:class"
+	$star_rating=Extract:"$star_rating","\d\d?"
+	
+	
+	$diamond_rating=Html:"#ctl00_ctl00_MainContent_ContentMain_hotelheader1_btnHotelStar:class"
+	$diamond_rating=Extract:"$diamond_rating","\d_\d"
+	$diamond_rating=Replace:"$diamond_rating","_","."
+	
+	#Jsoup:#ctl00_ctl00_MainContent_ContentMain_hotelheader1_btnHotelStar:class;;Reg:hstars\d+,,\d+
+	#hoteltype=
+	#prop_org=
+	
+	$latitude=Html:"#ctl00_ctl00_MainContent_AlternateHotelLis_imgGoogleMap,#ctl00_ctl00_MainContent_AlternateHotelLis_imgGoogleMapAB1150:src"
+	$latitude=Extract:"$latitude","-?\d+\.\d+,-?\d+\.\d+" 
+	$latitude=Substring:"$latitude","",","
+	
+	$longitude=html:"#ctl00_ctl00_MainContent_AlternateHotelLis_imgGoogleMap,#ctl00_ctl00_MainContent_AlternateHotelLis_imgGoogleMapAB1150:src"
+	$longitude=Extract:"$longitude","-?\d+\.\d+,-?\d+\.\d+"
+	$longitude=Substring:"$longitude",","
+	
+	$map_source=Set:"google"
+	
+	#simple_description=
+	
+	$description=Html:"#ctl00_ctl00_MainContent_ContentMain_HotelInformation1_pnlDescription"
+	
+	$xyz=Html:"#ctl00_ctl00_MainContent_ContentMain_HotelInformation1_pnlUsefulInfo",".pspacer"
+	$xyz=Join:"$xyz"
+	
+	$open_date=Substring:"$xyz","开业时间"
+	$open_date=Extract:"$open_date","\d{4}([-0-9]+)?"
+	
+	$decoration_date=Substring:"$xyz","最近装修年份 "
+	$decoration_date=Extract:"$decoration_date","\d{4}([-0-9]+)?"
+	
+#	priceRange=
+	
+	$checkin=Substring:"$xyz","早到入住时间"
+	$checkin=Extract:"$checkin","\d{1,2}:\d{1,2}.[A-Z]{1,2}"
+	
+	
+	$checkout=Substring:"$xyz","退房时间"
+	$checkout=Extract:"$checkout","\d{1,2}:\d{1,2}.[A-Z]{1,2}"
+	
+	#payCard=
+	
+	$landmark=Html:"#ctl00_ctl00_MainContent_ContentMain_ThumbPhotos_rLocation"
+	$landmark=SubString:"$landmark",":"
+	
+	$traffic=Extract:"$xyz","酒店距离市中心.[.0-9]+.km"
+	$traffic1=Extract:"$xyz","酒店距离机场 .[.0-9]+.km"
+	$traffic=Join:"$traffic","$traffic1"
+	
+	$breakfast=Substring:"$xyz","早餐费"
+	$breakfast=Extract:"$breakfast","\d+.[A-Z]{2,6}"
+	
+	#room_amenities=
+	#biz_amenities=
+	
+	$prop_amenities=Html:"#ctl00_ctl00_MainContent_ContentMain_HotelFeatures1_trFacilites","p[class=black]"
+	$prop_amenities=Join:"$prop_amenities"
+	$prop_amenities2=Html:"#ctl00_ctl00_MainContent_ContentMain_HotelFeatures1_trCarpark","p[class=black]"
+	$prop_amenities2=Join:"$prop_amenities2"
+	$prop_amenities=Join:"$prop_amenities",","
+	$prop_amenities=Join:"$prop_amenities","$prop_amenities2"
+	                         
+	$sport_amenities=Html:"#ctl00_ctl00_MainContent_ContentMain_HotelFeatures1_trSport","p[class=black]"
+	$sport_amenities=Join:"$sport_amenities"
+	
+	$source=Set:"agoda"
+	
+	$imageE=Htmle:"#ctl00_ctl00_MainContent_AlternateHotelLis_MainHotelPhoto1_pnlHotelPhoto","img"
+	#!表示调用其他模块。此处!image，表示调用image模块。true表示脱离当前上下文，进行独立运行。
+	$images=Call:"$imageE","!image","true"
+	$images=JsonString:"$images"
+
+#   移除临时变量
+	RemoveSet:"$prop_amenities2"
+	RemoveSet:"$imageE"
+	RemoveSet:"$traffic1"
+	RemoveSet:"$xyz"
+endblock
+
+block_image
+	$xyz=Html:"img:src"
+	
+	$type=Extract:"$xyz","\.\w{2,5}$"
+	$type=Replace:"$type","\."
+	
+	$url=Set:"$xyz"
+	$url=SubString:"$url",".net/"
+	$url=Replace:"$url","\/","."
+	$url=Join:"$url","agoda","left","."
+	
+	$alt=Extract:"$xyz","_Main"
+	$alt=Replace:"$alt","_Main","默认"
+	
+	$desc=Html:"img:alt"
+	$desc=SubString:"$desc","-"
+	
+#   移除临时变量
+	RemoveSet:"$xyz"
+endblock

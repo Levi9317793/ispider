@@ -1,0 +1,5 @@
+SetGobal:domain=http://www.agoda.com.cn/
+SetGobal:source=agoda
+ReadUrl:D:/agoda/酒店列表/澳大利亚.txt
+Get:
+SavePage:
